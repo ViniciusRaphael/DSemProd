@@ -1,0 +1,721 @@
+warning: LF will be replaced by CRLF in code.ipynb.
+The file will have its original line endings in your working directory
+[1mdiff --git a/code.ipynb b/code.ipynb[m
+[1mindex bcd3221..7bf231b 100644[m
+[1m--- a/code.ipynb[m
+[1m+++ b/code.ipynb[m
+[36m@@ -1,5 +1,689 @@[m
+ {[m
+  "cells": [[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 0.0 IMPORTS"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 1,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "import pandas as pd\r\n",[m
+[32m+[m[32m    "import inflection\r\n",[m
+[32m+[m[32m    "import math"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 0.1 Helper Functions"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 0.2 Loading data"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 2,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df_sales_raw = pd.read_csv('data/train.csv', low_memory=False)\r\n",[m
+[32m+[m[32m    "df_store_raw = pd.read_csv('data/store.csv', low_memory=False)"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 3,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df_raw = pd.merge(df_sales_raw, df_store_raw, how = 'left', on='Store')"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 1.0 DESCRIÇÃO DOS DADOS"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 1.1 Rename Columns"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 4,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1 = df_raw.copy()"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 5,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1.columns"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "execute_result",[m
+[32m+[m[32m     "data": {[m
+[32m+[m[32m      "text/plain": [[m
+[32m+[m[32m       "Index(['Store', 'DayOfWeek', 'Date', 'Sales', 'Customers', 'Open', 'Promo',\n",[m
+[32m+[m[32m       "       'StateHoliday', 'SchoolHoliday', 'StoreType', 'Assortment',\n",[m
+[32m+[m[32m       "       'CompetitionDistance', 'CompetitionOpenSinceMonth',\n",[m
+[32m+[m[32m       "       'CompetitionOpenSinceYear', 'Promo2', 'Promo2SinceWeek',\n",[m
+[32m+[m[32m       "       'Promo2SinceYear', 'PromoInterval'],\n",[m
+[32m+[m[32m       "      dtype='object')"[m
+[32m+[m[32m      ][m
+[32m+[m[32m     },[m
+[32m+[m[32m     "metadata": {},[m
+[32m+[m[32m     "execution_count": 5[m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 6,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "cols_old = ['Store', 'DayOfWeek', 'Date', 'Sales', 'Customers', 'Open', 'Promo',\r\n",[m
+[32m+[m[32m    "       'StateHoliday', 'SchoolHoliday', 'StoreType', 'Assortment',\r\n",[m
+[32m+[m[32m    "       'CompetitionDistance', 'CompetitionOpenSinceMonth',\r\n",[m
+[32m+[m[32m    "       'CompetitionOpenSinceYear', 'Promo2', 'Promo2SinceWeek',\r\n",[m
+[32m+[m[32m    "       'Promo2SinceYear', 'PromoInterval']\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "snakecase = lambda x: inflection.underscore(x)\r\n",[m
+[32m+[m[32m    "cols_new = list( map (snakecase, cols_old))\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "#rename\r\n",[m
+[32m+[m[32m    "df1.columns = cols_new"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 7,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1.columns"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "execute_result",[m
+[32m+[m[32m     "data": {[m
+[32m+[m[32m      "text/plain": [[m
+[32m+[m[32m       "Index(['store', 'day_of_week', 'date', 'sales', 'customers', 'open', 'promo',\n",[m
+[32m+[m[32m       "       'state_holiday', 'school_holiday', 'store_type', 'assortment',\n",[m
+[32m+[m[32m       "       'competition_distance', 'competition_open_since_month',\n",[m
+[32m+[m[32m       "       'competition_open_since_year', 'promo2', 'promo2_since_week',\n",[m
+[32m+[m[32m       "       'promo2_since_year', 'promo_interval'],\n",[m
+[32m+[m[32m       "      dtype='object')"[m
+[32m+[m[32m      ][m
+[32m+[m[32m     },[m
+[32m+[m[32m     "metadata": {},[m
+[32m+[m[32m     "execution_count": 7[m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 1.2 Data Dimensions"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 8,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "print(f'Number of rowns df1.shape[0]')\r\n",[m
+[32m+[m[32m    "print(f'Número of columns df1.shape[1]')"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "stream",[m
+[32m+[m[32m     "name": "stdout",[m
+[32m+[m[32m     "text": [[m
+[32m+[m[32m      "Number of rowns df1.shape[0]\n",[m
+[32m+[m[32m      "Número of columns df1.shape[1]\n"[m
+[32m+[m[32m     ][m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 1.3 Data Types"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 9,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1['date'] = pd.to_datetime(df1['date'])\r\n",[m
+[32m+[m[32m    "df1.dtypes"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "execute_result",[m
+[32m+[m[32m     "data": {[m
+[32m+[m[32m      "text/plain": [[m
+[32m+[m[32m       "store                                    int64\n",[m
+[32m+[m[32m       "day_of_week                              int64\n",[m
+[32m+[m[32m       "date                            datetime64[ns]\n",[m
+[32m+[m[32m       "sales                                    int64\n",[m
+[32m+[m[32m       "customers                                int64\n",[m
+[32m+[m[32m       "open                                     int64\n",[m
+[32m+[m[32m       "promo                                    int64\n",[m
+[32m+[m[32m       "state_holiday                           object\n",[m
+[32m+[m[32m       "school_holiday                           int64\n",[m
+[32m+[m[32m       "store_type                              object\n",[m
+[32m+[m[32m       "assortment                              object\n",[m
+[32m+[m[32m       "competition_distance                   float64\n",[m
+[32m+[m[32m       "competition_open_since_month           float64\n",[m
+[32m+[m[32m       "competition_open_since_year            float64\n",[m
+[32m+[m[32m       "promo2                                   int64\n",[m
+[32m+[m[32m       "promo2_since_week                      float64\n",[m
+[32m+[m[32m       "promo2_since_year                      float64\n",[m
+[32m+[m[32m       "promo_interval                          object\n",[m
+[32m+[m[32m       "dtype: object"[m
+[32m+[m[32m      ][m
+[32m+[m[32m     },[m
+[32m+[m[32m     "metadata": {},[m
+[32m+[m[32m     "execution_count": 9[m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 10,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1['date']"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "execute_result",[m
+[32m+[m[32m     "data": {[m
+[32m+[m[32m      "text/plain": [[m
+[32m+[m[32m       "0         2015-07-31\n",[m
+[32m+[m[32m       "1         2015-07-31\n",[m
+[32m+[m[32m       "2         2015-07-31\n",[m
+[32m+[m[32m       "3         2015-07-31\n",[m
+[32m+[m[32m       "4         2015-07-31\n",[m
+[32m+[m[32m       "             ...    \n",[m
+[32m+[m[32m       "1017204   2013-01-01\n",[m
+[32m+[m[32m       "1017205   2013-01-01\n",[m
+[32m+[m[32m       "1017206   2013-01-01\n",[m
+[32m+[m[32m       "1017207   2013-01-01\n",[m
+[32m+[m[32m       "1017208   2013-01-01\n",[m
+[32m+[m[32m       "Name: date, Length: 1017209, dtype: datetime64[ns]"[m
+[32m+[m[32m      ][m
+[32m+[m[32m     },[m
+[32m+[m[32m     "metadata": {},[m
+[32m+[m[32m     "execution_count": 10[m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 1.4 Check NA"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 11,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1.isna().sum()"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "execute_result",[m
+[32m+[m[32m     "data": {[m
+[32m+[m[32m      "text/plain": [[m
+[32m+[m[32m       "store                                0\n",[m
+[32m+[m[32m       "day_of_week                          0\n",[m
+[32m+[m[32m       "date                                 0\n",[m
+[32m+[m[32m       "sales                                0\n",[m
+[32m+[m[32m       "customers                            0\n",[m
+[32m+[m[32m       "open                                 0\n",[m
+[32m+[m[32m       "promo                                0\n",[m
+[32m+[m[32m       "state_holiday                        0\n",[m
+[32m+[m[32m       "school_holiday                       0\n",[m
+[32m+[m[32m       "store_type                           0\n",[m
+[32m+[m[32m       "assortment                           0\n",[m
+[32m+[m[32m       "competition_distance              2642\n",[m
+[32m+[m[32m       "competition_open_since_month    323348\n",[m
+[32m+[m[32m       "competition_open_since_year     323348\n",[m
+[32m+[m[32m       "promo2                               0\n",[m
+[32m+[m[32m       "promo2_since_week               508031\n",[m
+[32m+[m[32m       "promo2_since_year               508031\n",[m
+[32m+[m[32m       "promo_interval                  508031\n",[m
+[32m+[m[32m       "dtype: int64"[m
+[32m+[m[32m      ][m
+[32m+[m[32m     },[m
+[32m+[m[32m     "metadata": {},[m
+[32m+[m[32m     "execution_count": 11[m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "markdown",[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "# 1.5 Fill NA"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 15,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "#competition_distance\r\n",[m
+[32m+[m[32m    "# Distância da loja concorrente mais próxima. Por estar em branco, vamos substituir considerando que o valor é igual ao valor mais alto do dataset\r\n",[m
+[32m+[m[32m    "df1['competition_distance'] = df1['competition_distance'].fillna(int(200000))\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "#competition_open_since_month\r\n",[m
+[32m+[m[32m    "#Vamos considerar o mês semelhante à coluna Date\r\n",[m
+[32m+[m[32m    "df1['competition_open_since_month'] = df1.apply(lambda x: x['date'].month if math.isnan(x['competition_open_since_month']) else x['competition_open_since_month'], axis=1)\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "#competition_open_since_year\r\n",[m
+[32m+[m[32m    "df1['competition_open_since_year'] = df1.apply(lambda x: x['date'].month if math.isnan(x['competition_open_since_year']) else x['competition_open_since_year'], axis=1)\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "#promo2_since_week\r\n",[m
+[32m+[m[32m    "df1['promo2_since_week'] = df1.apply(lambda x: x['date'].week if math.isnan(x['promo_since_week']) else x['promo_since_week'], axis = 1)\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "# #promo2_since_year\r\n",[m
+[32m+[m[32m    "df1['promo2_since_year'] = df1.apply(lambda x: x['date'].week if math.isnan(x['promo2_since_year']) else x['promo2_since_year'], axis = 1)\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "\r\n"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 27,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "#promo_interval\r\n",[m
+[32m+[m[32m    "month_map = {1 :'Jan', 2 :'Feb',3 :'Mar',4 :'Apr',5 :'May',6 :'Jun',7 :'Jul',8 :'Aug',9 :'Sep',10 :'Oct',11 :'Nov',12 :'Dec'}\r\n",[m
+[32m+[m[32m    "df1['promo_interval'].fillna(0, inplace=True)\r\n",[m
+[32m+[m[32m    "\r\n",[m
+[32m+[m[32m    "df1['month_map'] = df1['date'].dt.month.map(month_map)\r\n",[m
+[32m+[m[32m    "df1['is_promo'] = df1[['promo_interval', 'month_map']].apply(\r\n",[m
+[32m+[m[32m    "    lambda x: \r\n",[m
+[32m+[m[32m    "    0 if x['promo_interval'] == 0 \r\n",[m
+[32m+[m[32m    "    else \r\n",[m
+[32m+[m[32m    "        1 if x['month_map'] in x['promo_interval'].split( ',') \r\n",[m
+[32m+[m[32m    "        else 0, \r\n",[m
+[32m+[m[32m    "        axis=1)"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 28,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1.isna().sum()"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "execute_result",[m
+[32m+[m[32m     "data": {[m
+[32m+[m[32m      "text/plain": [[m
+[32m+[m[32m       "store                           0\n",[m
+[32m+[m[32m       "day_of_week                     0\n",[m
+[32m+[m[32m       "date                            0\n",[m
+[32m+[m[32m       "sales                           0\n",[m
+[32m+[m[32m       "customers                       0\n",[m
+[32m+[m[32m       "open                            0\n",[m
+[32m+[m[32m       "promo                           0\n",[m
+[32m+[m[32m       "state_holiday                   0\n",[m
+[32m+[m[32m       "school_holiday                  0\n",[m
+[32m+[m[32m       "store_type                      0\n",[m
+[32m+[m[32m       "assortment                      0\n",[m
+[32m+[m[32m       "competition_distance            0\n",[m
+[32m+[m[32m       "competition_open_since_month    0\n",[m
+[32m+[m[32m       "competition_open_since_year     0\n",[m
+[32m+[m[32m       "promo2                          0\n",[m
+[32m+[m[32m       "promo2_since_week               0\n",[m
+[32m+[m[32m       "promo2_since_year               0\n",[m
+[32m+[m[32m       "promo_interval                  0\n",[m
+[32m+[m[32m       "promo_since_week                0\n",[m
+[32m+[m[32m       "promo_since_year                0\n",[m
+[32m+[m[32m       "month_map                       0\n",[m
+[32m+[m[32m       "is_promo                        0\n",[m
+[32m+[m[32m       "dtype: int64"[m
+[32m+[m[32m      ][m
+[32m+[m[32m     },[m
+[32m+[m[32m     "metadata": {},[m
+[32m+[m[32m     "execution_count": 28[m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m   "cell_type": "code",[m
+[32m+[m[32m   "execution_count": 29,[m
+[32m+[m[32m   "source": [[m
+[32m+[m[32m    "df1.head().T"[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "outputs": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m     "output_type": "execute_result",[m
+[32m+[m[32m     "data": {[m
+[32m+[m[32m      "text/html": [[m
+[32m+[m[32m       "<div>\n",[m
+[32m+[m[32m       "<style scoped>\n",[m
+[32m+[m[32m       "    .dataframe tbody tr th:only-of-type {\n",[m
+[32m+[m[32m       "        vertical-align: middle;\n",[m
+[32m+[m[32m       "    }\n",[m
+[32m+[m[32m       "\n",[m
+[32m+[m[32m       "    .dataframe tbody tr th {\n",[m
+[32m+[m[32m       "        vertical-align: top;\n",[m
+[32m+[m[32m       "    }\n",[m
+[32m+[m[32m       "\n",[m
+[32m+[m[32m       "    .dataframe thead th {\n",[m
+[32m+[m[32m       "        text-align: right;\n",[m
+[32m+[m[32m       "    }\n",[m
+[32m+[m[32m       "</style>\n",[m
+[32m+[m[32m       "<table border=\"1\" class=\"dataframe\">\n",[m
+[32m+[m[32m       "  <thead>\n",[m
+[32m+[m[32m       "    <tr style=\"text-align: right;\">\n",[m
+[32m+[m[32m       "      <th></th>\n",[m
+[32m+[m[32m       "      <th>0</th>\n",[m
+[32m+[m[32m       "      <th>1</th>\n",[m
+[32m+[m[32m       "      <th>2</th>\n",[m
+[32m+[m[32m       "      <th>3</th>\n",[m
+[32m+[m[32m       "      <th>4</th>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "  </thead>\n",[m
+[32m+[m[32m       "  <tbody>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>store</th>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>2</td>\n",[m
+[32m+[m[32m       "      <td>3</td>\n",[m
+[32m+[m[32m       "      <td>4</td>\n",[m
+[32m+[m[32m       "      <td>5</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>day_of_week</th>\n",[m
+[32m+[m[32m       "      <td>5</td>\n",[m
+[32m+[m[32m       "      <td>5</td>\n",[m
+[32m+[m[32m       "      <td>5</td>\n",[m
+[32m+[m[32m       "      <td>5</td>\n",[m
+[32m+[m[32m       "      <td>5</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>date</th>\n",[m
+[32m+[m[32m       "      <td>2015-07-31 00:00:00</td>\n",[m
+[32m+[m[32m       "      <td>2015-07-31 00:00:00</td>\n",[m
+[32m+[m[32m       "      <td>2015-07-31 00:00:00</td>\n",[m
+[32m+[m[32m       "      <td>2015-07-31 00:00:00</td>\n",[m
+[32m+[m[32m       "      <td>2015-07-31 00:00:00</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>sales</th>\n",[m
+[32m+[m[32m       "      <td>5263</td>\n",[m
+[32m+[m[32m       "      <td>6064</td>\n",[m
+[32m+[m[32m       "      <td>8314</td>\n",[m
+[32m+[m[32m       "      <td>13995</td>\n",[m
+[32m+[m[32m       "      <td>4822</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>customers</th>\n",[m
+[32m+[m[32m       "      <td>555</td>\n",[m
+[32m+[m[32m       "      <td>625</td>\n",[m
+[32m+[m[32m       "      <td>821</td>\n",[m
+[32m+[m[32m       "      <td>1498</td>\n",[m
+[32m+[m[32m       "      <td>559</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>open</th>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>promo</th>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>state_holiday</th>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>school_holiday</th>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>store_type</th>\n",[m
+[32m+[m[32m       "      <td>c</td>\n",[m
+[32m+[m[32m       "      <td>a</td>\n",[m
+[32m+[m[32m       "      <td>a</td>\n",[m
+[32m+[m[32m       "      <td>c</td>\n",[m
+[32m+[m[32m       "      <td>a</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>assortment</th>\n",[m
+[32m+[m[32m       "      <td>a</td>\n",[m
+[32m+[m[32m       "      <td>a</td>\n",[m
+[32m+[m[32m       "      <td>a</td>\n",[m
+[32m+[m[32m       "      <td>c</td>\n",[m
+[32m+[m[32m       "      <td>a</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>competition_distance</th>\n",[m
+[32m+[m[32m       "      <td>1270.0</td>\n",[m
+[32m+[m[32m       "      <td>570.0</td>\n",[m
+[32m+[m[32m       "      <td>14130.0</td>\n",[m
+[32m+[m[32m       "      <td>620.0</td>\n",[m
+[32m+[m[32m       "      <td>29910.0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>competition_open_since_month</th>\n",[m
+[32m+[m[32m       "      <td>9.0</td>\n",[m
+[32m+[m[32m       "      <td>11.0</td>\n",[m
+[32m+[m[32m       "      <td>12.0</td>\n",[m
+[32m+[m[32m       "      <td>9.0</td>\n",[m
+[32m+[m[32m       "      <td>4.0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>competition_open_since_year</th>\n",[m
+[32m+[m[32m       "      <td>2008.0</td>\n",[m
+[32m+[m[32m       "      <td>2007.0</td>\n",[m
+[32m+[m[32m       "      <td>2006.0</td>\n",[m
+[32m+[m[32m       "      <td>2009.0</td>\n",[m
+[32m+[m[32m       "      <td>2015.0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>promo2</th>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>promo2_since_week</th>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>13.0</td>\n",[m
+[32m+[m[32m       "      <td>14.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>promo2_since_year</th>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>2010.0</td>\n",[m
+[32m+[m[32m       "      <td>2011.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>promo_interval</th>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>Jan,Apr,Jul,Oct</td>\n",[m
+[32m+[m[32m       "      <td>Jan,Apr,Jul,Oct</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>promo_since_week</th>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>13.0</td>\n",[m
+[32m+[m[32m       "      <td>14.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>promo_since_year</th>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>2010.0</td>\n",[m
+[32m+[m[32m       "      <td>2011.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "      <td>31.0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>month_map</th>\n",[m
+[32m+[m[32m       "      <td>Jul</td>\n",[m
+[32m+[m[32m       "      <td>Jul</td>\n",[m
+[32m+[m[32m       "      <td>Jul</td>\n",[m
+[32m+[m[32m       "      <td>Jul</td>\n",[m
+[32m+[m[32m       "      <td>Jul</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "    <tr>\n",[m
+[32m+[m[32m       "      <th>is_promo</th>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>1</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "      <td>0</td>\n",[m
+[32m+[m[32m       "    </tr>\n",[m
+[32m+[m[32m       "  </tbody>\n",[m
+[32m+[m[32m       "</table>\n",[m
+[32m+[m[32m       "</div>"[m
+[32m+[m[32m      ],[m
+[32m+[m[32m      "text/plain": [[m
+[32m+[m[32m       "                                                0                    1  \\\n",[m
+[32m+[m[32m       "store                                           1                    2   \n",[m
+[32m+[m[32m       "day_of_week                                     5                    5   \n",[m
+[32m+[m[32m       "date                          2015-07-31 00:00:00  2015-07-31 00:00:00   \n",[m
+[32m+[m[32m       "sales                                        5263                 6064   \n",[m
+[32m+[m[32m       "customers                                     555                  625   \n",[m
+[32m+[m[32m       "open                                            1                    1   \n",[m
+[32m+[m[32m       "promo                                           1                    1   \n",[m
+[32m+[m[32m       "state_holiday                                   0                    0   \n",[m
+[32m+[m[32m       "school_holiday                                  1                    1   \n",[m
+[32m+[m[32m       "store_type                                      c                    a   \n",[m
+[32m+[m[32m       "assortment                                      a                    a   \n",[m
+[32m+[m[32m       "competition_distance                       1270.0                570.0   \n",[m
+[32m+[m[32m       "competition_open_since_month                  9.0                 11.0   \n",[m
+[32m+[m[32m       "competition_open_since_year                2008.0               2007.0   \n",[m
+[32m+[m[32m       "promo2                                          0                    1   \n",[m
+[32m+[m[32m       "promo2_since_week                            31.0                 13.0   \n",[m
+[32m+[m[32m       "promo2_since_year                            31.0               2010.0   \n",[m
+[32m+[m[32m       "promo_interval                                  0      Jan,Apr,Jul,Oct   \n",[m
+[32m+[m[32m       "promo_since_week                             31.0                 13.0   \n",[m
+[32m+[m[32m       "promo_since_year                             31.0               2010.0   \n",[m
+[32m+[m[32m       "month_map                                     Jul                  Jul   \n",[m
+[32m+[m[32m       "is_promo                                        0                    1   \n",[m
+[32m+[m[32m       "\n",[m
+[32m+[m[32m       "                                                2                    3  \\\n",[m
+[32m+[m[32m       "store                                           3                    4   \n",[m
+[32m+[m[32m       "day_of_week                                     5                    5   \n",[m
+[32m+[m[32m       "date                          2015-07-31 00:00:00  2015-07-31 00:00:00   \n",[m
+[32m+[m[32m       "sales                                        8314                13995   \n",[m
+[32m+[m[32m       "customers                                     821                 1498   \n",[m
+[32m+[m[32m       "open                                            1                    1   \n",[m
+[32m+[m[32m       "promo                                           1                    1   \n",[m
+[32m+[m[32m       "state_holiday                                   0                    0   \n",[m
+[32m+[m[32m       "school_holiday                                  1                    1   \n",[m
+[32m+[m[32m       "store_type                                      a                    c   \n",[m
+[32m+[m[32m       "assortment                                      a                    c   \n",[m
+[32m+[m[32m       "competition_distance                      14130.0                620.0   \n",[m
+[32m+[m[32m       "competition_open_since_month                 12.0                  9.0   \n",[m
+[32m+[m[32m       "competition_open_since_year                2006.0               2009.0   \n",[m
+[32m+[m[32m       "promo2                                          1                    0   \n",[m
+[32m+[m[32m       "promo2_since_week                            14.0                 31.0   \n",[m
+[32m+[m[32m       "promo2_since_year                          2011.0                 31.0   \n",[m
+[32m+[m[32m       "promo_interval                    Jan,Apr,Jul,Oct                    0   \n",[m
+[32m+[m[32m       "promo_since_week                             14.0                 31.0   \n",[m
+[32m+[m[32m       "promo_since_year                           2011.0                 31.0   \n",[m
+[32m+[m[32m       "month_map                                     Jul                  Jul   \n",[m
+[32m+[m[32m       "is_promo                                        1                    0   \n",[m
+[32m+[m[32m       "\n",[m
+[32m+[m[32m       "                                                4  \n",[m
+[32m+[m[32m       "store                                           5  \n",[m
+[32m+[m[32m       "day_of_week                                     5  \n",[m
+[32m+[m[32m       "date                          2015-07-31 00:00:00  \n",[m
+[32m+[m[32m       "sales                                        4822  \n",[m
+[32m+[m[32m       "customers                                     559  \n",[m
+[32m+[m[32m       "open                                            1  \n",[m
+[32m+[m[32m       "promo                                           1  \n",[m
+[32m+[m[32m       "state_holiday                                   0  \n",[m
+[32m+[m[32m       "school_holiday                                  1  \n",[m
+[32m+[m[32m       "store_type                                      a  \n",[m
+[32m+[m[32m       "assortment                                      a  \n",[m
+[32m+[m[32m       "competition_distance                      29910.0  \n",[m
+[32m+[m[32m       "competition_open_since_month                  4.0  \n",[m
+[32m+[m[32m       "competition_open_since_year                2015.0  \n",[m
+[32m+[m[32m       "promo2                                          0  \n",[m
+[32m+[m[32m       "promo2_since_week                            31.0  \n",[m
+[32m+[m[32m       "promo2_since_year                            31.0  \n",[m
+[32m+[m[32m       "promo_interval                                  0  \n",[m
+[32m+[m[32m       "promo_since_week                             31.0  \n",[m
+[32m+[m[32m       "promo_since_year                             31.0  \n",[m
+[32m+[m[32m       "month_map                                     Jul  \n",[m
+[32m+[m[32m       "is_promo                                        0  "[m
+[32m+[m[32m      ][m
+[32m+[m[32m     },[m
+[32m+[m[32m     "metadata": {},[m
+[32m+[m[32m     "execution_count": 29[m
+[32m+[m[32m    }[m
+[32m+[m[32m   ],[m
+[32m+[m[32m   "metadata": {}[m
+[32m+[m[32m  },[m
+   {[m
+    "cell_type": "code",[m
+    "execution_count": null,[m
+[36m@@ -11,7 +695,23 @@[m
+  "metadata": {[m
+   "orig_nbformat": 4,[m
+   "language_info": {[m
+[31m-   "name": "python"[m
+[32m+[m[32m   "name": "python",[m
+[32m+[m[32m   "version": "3.8.8",[m
+[32m+[m[32m   "mimetype": "text/x-python",[m
+[32m+[m[32m   "codemirror_mode": {[m
+[32m+[m[32m    "name": "ipython",[m
+[32m+[m[32m    "version": 3[m
+[32m+[m[32m   },[m
+[32m+[m[32m   "pygments_lexer": "ipython3",[m
+[32m+[m[32m   "nbconvert_exporter": "python",[m
+[32m+[m[32m   "file_extension": ".py"[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "kernelspec": {[m
+[32m+[m[32m   "name": "python3",[m
+[32m+[m[32m   "display_name": "Python 3.8.8 64-bit ('venvDSemProd': venv)"[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "interpreter": {[m
+[32m+[m[32m   "hash": "8e5f687d250ad8e96bf38398ebaba746205bdae3e02d85ce614037c2f63cdf8e"[m
+   }[m
+  },[m
+  "nbformat": 4,[m

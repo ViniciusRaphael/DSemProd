@@ -1,4 +1,5 @@
 backcall==0.2.0
+Boruta==0.3
 colorama==0.4.4
 cycler==0.10.0
 debugpy==1.5.0

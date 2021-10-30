@@ -4,7 +4,7 @@ from flask import Flask, request, Response
 from rossmann.Rossmann import Rossmann
 
 # loading model
-model = pickle.load(open( 'C:\\Users\\vinicius.sousa\\Desktop\\github\\DSemProd\\parameter\\model_rossman.pkl', 'rb'))
+model = pickle.load(open( r'C:\Users\Vinicius\Desktop\DSemProd\parameter\model_rossman.pkl', 'rb'))
 
 # initialize API
 app = Flask( __name__ )
@@ -44,4 +44,4 @@ def rossman_predict():
 
 
 if __name__ == '__main__':
-    app.run( '0.0.0.0', port=5000, debug=True)
+    app.run( '192.168.0.7', port=5000, debug=True)

@@ -7,12 +7,12 @@ import datetime
 
 class Rossmann(object):
        def __init__(self):
-              self.home_path = 'C:\\Users\\vinicius\\Desktop\\DSemProd'
-              self.competition_distance_scaler          = pickle.load(open(self.home_path + '\\parameter\\competition_distance_scaler.pkl', 'rb'))
-              self.competition_time_month_scaler        = pickle.dump(open(self.home_path + '\\parameter\\competition_time_month_scaler.pkl', 'rb'))
-              self.promo_time_week_scaler               = pickle.dump(open(self.home_path + '\\parameter\\promo_time_week_scaler.pkl', 'rb'))
-              self.year_scaler                          = pickle.dump(open(self.home_path + '\\parameter\\year_scaler.pkl','rb'))
-              self.store_type_scaler                    = pickle.dump(open(self.home_path + '\\parameter\\store_type_scaler.pkl', 'wb') )
+              self.home_path = r'\Users\Vinicius\Desktop\DSemProd'
+              self.competition_distance_scaler   = pickle.load( open( self.home_path + r'\parameter\competition_distance_scaler.pkl', 'rb') )
+              self.competition_time_month_scaler = pickle.load( open( self.home_path + r'\parameter\competition_time_month_scaler.pkl', 'rb') )
+              self.promo_time_week_scaler        = pickle.load( open( self.home_path + r'\parameter\promo_time_week_scaler.pkl', 'rb') )
+              self.year_scaler                   = pickle.load( open( self.home_path + r'\parameter\year_scaler.pkl', 'rb') )
+              self.store_type_scaler             = pickle.load( open( self.home_path + r'\parameter\store_type_scaler.pkl', 'rb') )
 
        def data_cleaning(self, df1):
               ## 1.1 Rename Columns
@@ -126,7 +126,7 @@ class Rossmann(object):
 
               # CHOSEN COLUMNS
               # competition distance
-              df5['competition_distance'] = self.competiion_distance_scaler.transform(df5[['competition_distance']].values )
+              df5['competition_distance'] = self.competition_distance_scaler.transform(df5[['competition_distance']].values )
               
               # competition time month
               df5['competition_time_month'] = self.competition_time_month_scaler.transform(df5[['competition_time_month']].values )
@@ -179,10 +179,10 @@ class Rossmann(object):
             
               return df5[cols_selected]
 
-       def get_prediction( self, model, original_date, test_date):
+       def get_prediction( self, model, original_data, test_data):
               # prediction
-              pred = model.predict( test_data)
+              pred = model.predict(test_data)
 
               # join pred into the original data
               original_data['prediction'] = np.expm1(pred)
-              return original_data.to_json(oriente = 'records', date_format='iso')
+              return original_data.to_json(orient = 'records', date_format='iso')
